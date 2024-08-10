@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import TopBar from './components/TopBar.vue'
+import BarGraph from './components/BarGraph.vue';
 </script>
 
 <template>
   <el-container>
-    <el-header><TopBar></TopBar></el-header>
-    <el-main></el-main>
+    <el-header>
+      <TopBar></TopBar>
+    </el-header>
+    <el-main>
+      <BarGraph></BarGraph>
+    </el-main>
   </el-container>
 </template>
 
@@ -18,6 +23,9 @@ import TopBar from './components/TopBar.vue'
     margin: 5px;
   }
   .el-main {
+    padding: 0;
+    margin: 0 15px;
+
   }
 }
 </style>

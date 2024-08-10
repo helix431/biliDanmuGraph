@@ -55,8 +55,9 @@ const processData = (data: Data[]) => {
     counts[Math.floor(timeData[i] / threshold)]++
   }
 
-  return counts.map((item) => {
+  return counts.map((item, index) => {
     return {
+      index,
       count: item,
       clicked: false
     }

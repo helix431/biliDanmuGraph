@@ -7,7 +7,7 @@ export const useDataStore = defineStore('data',
     const bvid = ref('')
     const token = ref('')
 
-    const plotDataList = ref<PlotData[]>()
+    const plotDataList = ref<PlotData[]>([])
 
     return { bvid, token, plotDataList }
   },

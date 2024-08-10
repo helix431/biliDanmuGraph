@@ -1,29 +1,30 @@
 export interface ValidateData {
-    code: number,
+    code: number
     message: string
 }
 
 export interface Data {
-    attr: number,
-    color: number,
-    content: string,
-    ctime: string,
-    fontsize: number,
-    id: string,
-    idStr: string,
-    midHash: string,
-    mode: number,
-    progress: number,
+    attr: number
+    color: number
+    content: string
+    ctime: string
+    fontsize: number
+    id: string
+    idStr: string
+    midHash: string
+    mode: number
+    progress: number
     weight: number
 }
 
 export interface ResData {
-    bvid: string,
-    data: Data[],
+    bvid: string
+    data: Data[]
     title: string
 }
 
 export interface PlotData {
-    count: number,
+    index: number
+    count: number
     clicked: boolean
 }
