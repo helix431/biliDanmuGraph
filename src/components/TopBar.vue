@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { validateCookie } from '@/api'
+import { getData, validateCookie } from '@/api'
 import { useDataStore } from '@/stores/data'
+import type { Data } from '@/types/data'
 import type { FormInstance } from 'element-plus'
 import { onMounted, ref } from 'vue'
 
@@ -37,6 +38,31 @@ const rules = ref({
   token: [{ validator: validateToken, trigger: 'blur' }]
 })
 
+const processData = (data: Data[]) => {
+  const timeData = data
+    .map((item) => item.progress)
+    .sort((a, b) => a - b)
+    .filter((item) => item !== undefined)
+  const dataMax = timeData[timeData.length - 1]
+
+  const counts = []
+  let threshold = 1000 * 6
+  for (let i = 0; i < Math.ceil(dataMax / threshold); i++) {
+    counts.push(0)
+  }
+
+  for (let i = 0; i < timeData.length; i++) {
+    counts[Math.floor(timeData[i] / threshold)]++
+  }
+
+  return counts.map((item) => {
+    return {
+      count: item,
+      clicked: false
+    }
+  })
+}
+
 const onSubmit = () => {
   formRef.value?.validate(async (valid) => {
     if (valid) {
@@ -45,7 +71,9 @@ const onSubmit = () => {
       dataStore.bvid = form.value.bvid
       dataStore.token = form.value.token
 
-      console.log('ok')
+      const res = await getData(form.value.bvid)
+
+      dataStore.plotDataList = processData(res.data)
     } else {
       showTokenField.value = true
     }
@@ -102,7 +130,7 @@ onMounted(async () => {
     margin-bottom: 0;
     margin-right: 10px;
     &.bvidField {
-      width: 140px;
+      width: 150px;
     }
     &.tokenField {
       width: 240px;

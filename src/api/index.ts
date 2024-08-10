@@ -1,9 +1,6 @@
 import service from "@/utils/request";
 
-interface ValidateData {
-    code: number,
-    message: string
-}
+import type {ResData, ValidateData} from '@/types/data'
 
 export const validateCookie = (cookie: string) => {
     return service<any, ValidateData>({
@@ -11,6 +8,16 @@ export const validateCookie = (cookie: string) => {
         method: 'post',
         data: {
             cookie
+        }
+    })
+}
+
+export const getData = (bvid: string) => {
+    return service<any, ResData>({
+        url: '/data',
+        method: 'post',
+        data: {
+            bvid
         }
     })
 }
