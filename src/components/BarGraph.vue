@@ -19,6 +19,9 @@ const onClick = (clickedItem: PlotData) => {
   const foundItem = dataStore.plotDataList.find((item) => item.index === clickedItem.index)
   if (!foundItem) return
   foundItem.clicked = true
+
+  const url = `https://www.bilibili.com/video/${dataStore.bvid}/?t=${foundItem.index * 6}`
+  window.open(url, '_blank')
 }
 
 onMounted(() => {
@@ -31,7 +34,7 @@ onMounted(() => {
     class="barPlot"
     ref="barPlotRef"
     :style="{
-      width: dataStore.plotDataList.length * 4 + 'px',
+      width: dataStore.plotDataList.length * 4 + 'px'
     }"
   >
     <div
