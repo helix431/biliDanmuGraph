@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import persistedState from 'pinia-plugin-persistedstate'
 
 import 'normalize.css'
 import ElementPlus from 'element-plus'
@@ -9,7 +10,10 @@ import App from './App.vue'
 
 const app = createApp(App)
 
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(persistedState)
+app.use(pinia)
+
 app.use(ElementPlus)
 
 app.mount('#app')

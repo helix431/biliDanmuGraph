@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import { validateCookie } from '@/api'
+import { useDataStore } from '@/stores/data'
 import type { FormInstance } from 'element-plus'
 import { onMounted, ref } from 'vue'
 
+const dataStore = useDataStore()
+
 const form = ref({
-  bvid: '',
-  token: ''
+  bvid: dataStore.bvid,
+  token: dataStore.token
 })
 
 const isTokenValid = ref(true)
@@ -12,14 +16,18 @@ const showTokenField = ref(false)
 
 const formRef = ref<FormInstance>()
 
-const validateToken = (rule: any, value: any, callback: any) => {
+const validateToken = async (rule: any, value: any, callback: any) => {
   if (!value) {
     return callback(new Error('请输入token'))
   }
 
+  await checkToken()
+
   if (!isTokenValid.value) {
     return callback(new Error('token无效'))
   }
+
+  showTokenField.value = false
 
   callback()
 }
@@ -30,22 +38,37 @@ const rules = ref({
 })
 
 const onSubmit = () => {
-  formRef.value?.validate((valid) => {
+  formRef.value?.validate(async (valid) => {
     if (valid) {
       showTokenField.value = false
 
-      console.log('valid')
+      dataStore.bvid = form.value.bvid
+      dataStore.token = form.value.token
+
+      console.log('ok')
     } else {
       showTokenField.value = true
     }
   })
 }
 
-const onCheckToken = () => {
+const checkToken = async () => {
+  const res = await validateCookie(form.value.token)
+
+  if (res.code === 0) {
+    isTokenValid.value = true
+  } else {
+    isTokenValid.value = false
+  }
+}
+
+const onCheckToken = async () => {
   showTokenField.value = !showTokenField.value
 }
 
-onMounted(() => {})
+onMounted(async () => {
+  await checkToken()
+})
 </script>
 
 <template>
