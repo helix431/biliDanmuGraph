@@ -5,6 +5,7 @@ import type { Data } from '@/types/data'
 import type { FormInstance } from 'element-plus'
 import { onMounted, ref } from 'vue'
 import ProgressBar from './ProgressBar.vue'
+import TimeOffset from './TimeOffset.vue'
 
 const dataStore = useDataStore()
 
@@ -113,44 +114,59 @@ onMounted(async () => {
 </script>
 
 <template>
-  <el-form :inline="true" :model="form" :rules="rules" ref="formRef">
-    <el-form-item class="bvidField" prop="bvid">
-      <el-input v-model="form.bvid" placeholder="bvid" clearable />
-    </el-form-item>
+  <div class="topBar">
+    <div class="topBarLeft">
+      <el-form :inline="true" :model="form" :rules="rules" ref="formRef">
+        <el-form-item class="bvidField" prop="bvid">
+          <el-input v-model="form.bvid" placeholder="bvid" clearable />
+        </el-form-item>
 
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">获取</el-button>
-    </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">获取</el-button>
+        </el-form-item>
 
-    <el-form-item>
-      <el-button :type="isTokenValid ? 'success' : 'danger'" @click="onCheckToken"
-        >token{{ isTokenValid ? '有效' : '失效' }}</el-button
-      >
-    </el-form-item>
+        <el-form-item>
+          <el-button :type="isTokenValid ? 'success' : 'danger'" @click="onCheckToken"
+            >token{{ isTokenValid ? '有效' : '失效' }}</el-button
+          >
+        </el-form-item>
 
-    <el-form-item class="tokenField" prop="token">
-      <Transition name="stretch">
-        <el-input v-model="form.token" placeholder="token" clearable v-if="showTokenField" />
-      </Transition>
-      <Transition name="fade">
-        <ProgressBar class="progressBar" v-if="showProgressBar"></ProgressBar>
-      </Transition>
-    </el-form-item>
-  </el-form>
+        <el-form-item class="tokenField" prop="token">
+          <Transition name="stretch">
+            <el-input v-model="form.token" placeholder="token" clearable v-if="showTokenField" />
+          </Transition>
+          <Transition name="fade">
+            <ProgressBar class="progressBar" v-if="showProgressBar"></ProgressBar>
+          </Transition>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div class="topBarRight">
+      <TimeOffset></TimeOffset>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.el-form {
-  width: 600px;
-  .el-form-item {
-    margin-bottom: 0;
-    margin-right: 10px;
-    &.bvidField {
-      width: 150px;
+.topBar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  .topBarLeft {
+    .el-form {
+      .el-form-item {
+        margin-bottom: 0;
+        margin-right: 10px;
+        &.bvidField {
+          width: 150px;
+        }
+        .progressBar {
+          width: 240px;
+        }
+      }
     }
-    .progressBar {
-      width: 240px;
-    }
+  }
+  .topBarRight {
   }
 }
 

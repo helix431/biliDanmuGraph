@@ -20,7 +20,7 @@ const onClick = (clickedItem: PlotData) => {
   if (!foundItem) return
   foundItem.clicked = true
 
-  const url = `https://www.bilibili.com/video/${dataStore.bvid}/?t=${foundItem.index * 6}`
+  const url = `https://www.bilibili.com/video/${dataStore.bvid}/?t=${foundItem.index * 6 + dataStore.timeOffset}`
   window.open(url, '_blank')
 }
 
