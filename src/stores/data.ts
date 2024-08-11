@@ -6,10 +6,11 @@ export const useDataStore = defineStore('data',
   () => {
     const bvid = ref('')
     const token = ref('')
+    const title = ref('')
 
     const plotDataList = ref<PlotData[]>([])
 
-    return { bvid, token, plotDataList }
+    return { bvid, token, title, plotDataList }
   },
   {
     persist: true

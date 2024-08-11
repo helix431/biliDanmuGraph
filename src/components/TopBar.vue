@@ -78,6 +78,9 @@ const onSubmit = () => {
 
       const res = await getData(form.value.bvid)
 
+      dataStore.title = res.title
+      document.title = res.title
+
       dataStore.plotDataList = processData(res.data)
 
       setTimeout(() => {
@@ -104,6 +107,7 @@ const onCheckToken = async () => {
 }
 
 onMounted(async () => {
+  document.title = dataStore.title || 'danmuGraph'
   await checkToken()
 })
 </script>
