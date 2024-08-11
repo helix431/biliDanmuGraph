@@ -19,13 +19,10 @@ let segProgress
 app.post('/validate', (req, res) => {
     const receivedCookie = req.body.cookie;
 
-    console.log(receivedCookie);
-
     axios.get(url, {
         headers: { 'Cookie': receivedCookie }
     })
         .then(response => {
-            console.log('nav');
             if (response.data.code === 0) {
                 cookie = receivedCookie
                 res.send({
@@ -46,14 +43,12 @@ app.post('/validate', (req, res) => {
 });
 
 app.get('/progress', (req, res) => {
-    res.send(String(segProgress));
+    res.send(segProgress);
 });
 
 // 获取bvid
 app.post('/data', (req, res) => {
     const bvid = req.body.bvid;
-
-    console.log(bvid);
 
     // 根据BV号获取视频信息
     async function getVideoInfo(bvid) {
@@ -63,7 +58,6 @@ app.post('/data', (req, res) => {
                 bvid,
             },
         })
-        console.log('view');
 
         const message = res.data
         const segNum = Math.ceil(message.data.duration / 360) // 6分钟一个seg
@@ -102,7 +96,7 @@ app.post('/data', (req, res) => {
             params: params,
             responseType: 'arraybuffer'
         })
-        console.log('seg.so');
+
         const message = await parseProtobuf(res.data)
 
         // 返回解析后弹幕数据中的每条弹幕
@@ -111,13 +105,22 @@ app.post('/data', (req, res) => {
 
     // 根据总seg数获取全部弹幕数据
     async function getAllDm(params) {
+        const total = params.segment_index
         const elemsArray = []
         while (params.segment_index) {
             const dm = await getDmSeg(params)
             elemsArray.push(dm)
             console.log(params.segment_index);
-            segProgress = params.segment_index
+            segProgress = {
+                total,
+                index: params.segment_index,
+            }
             params.segment_index--
+        }
+
+        segProgress = {
+            total,
+            index: 0,
         }
         return elemsArray
     }

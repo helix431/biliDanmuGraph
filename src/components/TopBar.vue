@@ -4,6 +4,7 @@ import { useDataStore } from '@/stores/data'
 import type { Data } from '@/types/data'
 import type { FormInstance } from 'element-plus'
 import { onMounted, ref } from 'vue'
+import ProgressBar from './ProgressBar.vue'
 
 const dataStore = useDataStore()
 
@@ -14,6 +15,7 @@ const form = ref({
 
 const isTokenValid = ref(true)
 const showTokenField = ref(false)
+const showProgressBar = ref(false)
 
 const formRef = ref<FormInstance>()
 
@@ -72,9 +74,15 @@ const onSubmit = () => {
       dataStore.bvid = form.value.bvid
       dataStore.token = form.value.token
 
+      showProgressBar.value = true
+
       const res = await getData(form.value.bvid)
 
       dataStore.plotDataList = processData(res.data)
+
+      setTimeout(() => {
+        showProgressBar.value = false
+      }, 1000)
     } else {
       showTokenField.value = true
     }
@@ -120,6 +128,9 @@ onMounted(async () => {
       <Transition name="stretch">
         <el-input v-model="form.token" placeholder="token" clearable v-if="showTokenField" />
       </Transition>
+      <Transition name="fade">
+        <ProgressBar class="progressBar" v-if="showProgressBar"></ProgressBar>
+      </Transition>
     </el-form-item>
   </el-form>
 </template>
@@ -133,7 +144,7 @@ onMounted(async () => {
     &.bvidField {
       width: 150px;
     }
-    &.tokenField {
+    .progressBar {
       width: 240px;
     }
   }
@@ -147,6 +158,16 @@ onMounted(async () => {
 .stretch-enter-from,
 .stretch-leave-to {
   width: 0;
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

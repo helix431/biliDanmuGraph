@@ -1,6 +1,6 @@
 import service from "@/utils/request";
 
-import type {ResData, ValidateData} from '@/types/data'
+import type { Progress, ResData, ValidateData } from '@/types/data'
 
 export const validateCookie = (cookie: string) => {
     return service<any, ValidateData>({
@@ -19,5 +19,11 @@ export const getData = (bvid: string) => {
         data: {
             bvid
         }
+    })
+}
+
+export const getProgress = () => {
+    return service<any, Progress>({
+        url: '/progress',
     })
 }

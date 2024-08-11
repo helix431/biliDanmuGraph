@@ -28,3 +28,8 @@ export interface PlotData {
     count: number
     clicked: boolean
 }
+
+export interface Progress {
+    total: number
+    index: number
+}
