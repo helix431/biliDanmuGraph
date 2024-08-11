@@ -17,6 +17,7 @@ const form = ref({
 const isTokenValid = ref(true)
 const showTokenField = ref(false)
 const showProgressBar = ref(false)
+const progressBarRef = ref()
 
 const formRef = ref<FormInstance>()
 
@@ -84,6 +85,7 @@ const onSubmit = () => {
 
       dataStore.plotDataList = processData(res.data)
 
+      progressBarRef.value.progressComplete()
       setTimeout(() => {
         showProgressBar.value = false
       }, 1000)
@@ -136,7 +138,11 @@ onMounted(async () => {
             <el-input v-model="form.token" placeholder="token" clearable v-if="showTokenField" />
           </Transition>
           <Transition name="fade">
-            <ProgressBar class="progressBar" v-if="showProgressBar"></ProgressBar>
+            <ProgressBar
+              class="progressBar"
+              ref="progressBarRef"
+              v-if="showProgressBar"
+            ></ProgressBar>
           </Transition>
         </el-form-item>
       </el-form>

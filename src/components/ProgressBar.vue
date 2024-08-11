@@ -16,6 +16,11 @@ const percentage = computed(() => {
 
 const format = (percentage: number) => `${percentage.toFixed(0)}%`
 
+const progressComplete = () => {
+  progress.value.index = 0
+  clearInterval(timerId)
+}
+
 onMounted(() => {
   timerId = setInterval(async () => {
     const res = await getProgress()
@@ -30,6 +35,8 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(timerId)
 })
+
+defineExpose({progressComplete})
 </script>
 
 <template>
